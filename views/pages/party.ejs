@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%=party.partyName%></title>
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<div id="messages">
+
+</div>
+
+<iframe id="video" width="960" height="720" id="music_url" src="" frameborder="0" allowfullscreen>
+    <script type="text/javascript">  
+
+console.log('log');
+        window.addEventListener('message', function(event) {
+                // IMPORTANT: Check the origin of the data!
+                //if (~event.origin.indexOf('http://localhost:3000')) {
+                // The data has been sent from your site
+
+                // The data sent with postMessage is stored in event.data
+                console.log(event.data);
+                //} else {
+                // The data hasn't been sent from your site!
+                // Be careful! Do not use it.
+                //return;
+                //}
+                });
+
+</script>
+</iframe>
+<ul id="playList">
+<% for(var i=0; i<party.playList.length; i++){ %>
+    <li class="video" url="<%=party.playList[i].url %>" watched="no"><%=party.playList[i].videoName %></li>
+<% } %>
+</ul>
+<script type="text/javascript">
+    var frame = document.getElementById('video');
+    frame.contentWindow.postMessage("hello world", '*');
+
+    $('.video').each(function(index){
+            console.log(index);
+
+            //$("#video").attr('src', $(this).attr('url')+"?autoplay=1");
+            $("#video").attr('src', "https://www.youtube.com/embed/wtJUaXsgYfU?autoplay=1");
+    });
+</script>
+</body>
+</html>
