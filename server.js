@@ -1,3 +1,5 @@
+//this is meng
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var mySongList = require('./songList.js');
@@ -35,8 +37,18 @@ console.log("The request has all the following cookies:");
 
 var partyId = "party1";
 
-app.get("/party/:partyId", function (req,res) {
+// app.get("/party/:partyId", function (req,res) {
     
+<<<<<<< HEAD
+//     var pid = req.params.partyId;
+//     //check if the partyId in partList
+//     //if not show error
+    
+    
+    
+// 	res.render('pages/party',{partyId: pid});
+// });
+=======
     var pid = req.params.partyId;
     //check if the partyId in partList
     //if not show error
@@ -45,6 +57,7 @@ app.get("/party/:partyId", function (req,res) {
     
 	res.render('pages/party',{partyId: pid});
 });
+>>>>>>> 31ca6a8e302f7310a026d73bbd709be581b8846b
 
 //socket.io start
 
@@ -68,7 +81,12 @@ app.use(function (request, response, next) {
     next();
 });
 
+<<<<<<< HEAD
+
+app.get("/", function(request, response){
+=======
 app.use(function (request, response, next) {
+>>>>>>> 31ca6a8e302f7310a026d73bbd709be581b8846b
     
     response.locals.user  = undefined;
     var sessionId = request.cookies.currentSessionId;
@@ -130,6 +148,10 @@ app.post("/register", function (request, response) {
 
 });
 
+<<<<<<< HEAD
+app.get("/party/:partyId", function(request, response) {
+   response.render("pages/songList",{partyId: request.params.partyId});
+=======
 
 app.post("/login", function (request, response) {
 
@@ -202,13 +224,45 @@ app.get("/", function(request, response){
 
 app.post("/party/:partyId", function(request, response) {
     
+>>>>>>> 31ca6a8e302f7310a026d73bbd709be581b8846b
 });
 
+app.post("/party/:partyId", function(request, response) {
+    //console.log(request.params.partyId);
+   mySongList.addSongbyUrl(request.params.partyId,request.body.Url).then(function() {
+       //console.log(request.body.Url);
+    	response.render("pages/songList", {partyId: request.params.partyId});
+    });
+});
+app.get("/party/:partyId/playList", function(request, response) {
+   
+   mySongList.findPartyByPartyID(request.params.partyId).then(function(party) {
+       try{
+       
+       var songs = [];
+       for(var i=0; i<party.playList.length; i++){
+           var url = party.playList[i].url;
+           if( url.indexOf("youtu.be/") != -1){
+            songs.push(url.substr(url.indexOf("youtu.be/")+"youtu.be/".length,11 ));   
+           }
+           if(url.indexOf("v=") != -1)
+            songs.push(url.substr(url.indexOf("v=")+2,11 ));
+           
+       }}catch(err){
+         console.log(err);
+       }
+       response.jsonp({songs: songs });
+   });
+});
 
 app.get("/party/songList/:id", function (req,res) {
-	var id = req.params.id;
-	var result = mySongList.get(partyId, id);
-	res.json(result);
+	 mySongList.addSongbyUrl(request.params.partyId,request.body.Url).then(function() {
+    	response.render("pages/songList", {pageTitle: "Song is added."});
+	}, function() {
+		var party = mySongList.findPartyByPartyID(request.params.partyId);
+        console.log(party);
+		response.redirect("pages/songList")
+	});
 });
 
 app.post("/party", function(req,res) {
